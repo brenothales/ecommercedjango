@@ -1,12 +1,8 @@
 from django.shortcuts import render, get_object_or_404
 from django.views import generic
+
 from .models import Product, Category
 
-# def product_list(request):
-#     context = {
-#         'product_list': Product.objects.all()
-#     }
-#     return render(request,'catalog/product_list.html', context)
 
 class ProductListView(generic.ListView):
 
@@ -15,15 +11,9 @@ class ProductListView(generic.ListView):
     context_object_name = 'products'
     paginate_by = 3
 
+
 product_list = ProductListView.as_view()
 
-# def category(request, slug):
-#     category = Category.objects.get(slug=slug)
-#     context = {
-#         'current_category': category,
-#         'product_list': Product.objects.filter(category=category),
-#     }
-#     return render(request, 'catalog/category.html', context)
 
 class CategoryListView(generic.ListView):
 
@@ -43,11 +33,9 @@ class CategoryListView(generic.ListView):
 category = CategoryListView.as_view()
 
 
-
 def product(request, slug):
     product = Product.objects.get(slug=slug)
     context = {
-        'product':product,
+        'product': product
     }
     return render(request, 'catalog/product.html', context)
-
