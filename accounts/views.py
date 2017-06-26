@@ -1,7 +1,10 @@
 from django.shortcuts import render
-from django.views.generic import CreateView, TemplateView
+from django.views.generic import (
+    CreateView, TemplateView, UpdateView, FormView
+)
 from django.core.urlresolvers import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.forms import PasswordChangeForm
 # from django.contrib.auth.decorators import login_required
 
 from .models import User
@@ -20,5 +23,43 @@ class RegisterView(CreateView):
     form_class = UserAdminCreationForm
     success_url = reverse_lazy('index')
 
+class UpdateUserView(LoginRequiredMixin, UpdateView):
+
+    model = User
+    template_name = 'accounts/update_user.html'
+    fields = ['name', 'email']
+    success_url = reverse_lazy('accounts:index')
+
+    def get_object(self):
+        return self.request.user
+
+
+class UpdatePasswordView(LoginRequiredMixin, FormView):
+
+    template_name = 'accounts/update_password.html'
+    success_url = reverse_lazy('accounts:index')
+    form_class = PasswordChangeForm
+
+    def get_form_kwargs(self):
+        kwargs = super(UpdatePasswordView, self).get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+
+
 index = IndexView.as_view()
 register = RegisterView.as_view()
+update_user = UpdateUserView.as_view()
+update_password = UpdatePasswordView.as_view()
+
+
+
+
+
+
+
+
+
+
+
+
